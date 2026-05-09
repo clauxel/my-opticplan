@@ -1,0 +1,38 @@
+name = "my-opticplan"
+main = "worker/index.js"
+compatibility_date = "2026-05-09"
+workers_dev = true
+routes = [
+  { pattern = "opticplan.space/*", zone_name = "opticplan.space" },
+  { pattern = "www.opticplan.space/*", zone_name = "opticplan.space" }
+]
+
+[vars]
+CREEM_API_BASE = "https://api.creem.io"
+CREEM_ENV = "live"
+
+[[kv_namespaces]]
+binding = "ANALYTICS_KV"
+id = "2b8dbfd7d39a4d23a0dfc36123085768"
+
+[assets]
+directory = "./dist"
+binding = "SITE_ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = [
+  "/",
+  "/optical-interconnect-companies",
+  "/optical-compute-interconnect-oci",
+  "/ai-interconnect",
+  "/optical-interconnects",
+  "/optical-compute-interconnect-msa",
+  "/ai-interconnect-podcast",
+  "/optical-scale-up-consortium",
+  "/ai-data-center-interconnect",
+  "/pricing",
+  "/privacy",
+  "/terms",
+  "/sitemap.xml",
+  "/robots.txt",
+  "/api/*"
+]
