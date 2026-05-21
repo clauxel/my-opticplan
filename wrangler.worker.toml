@@ -11,28 +11,16 @@ routes = [
 CREEM_API_BASE = "https://api.creem.io"
 CREEM_ENV = "live"
 
-[[kv_namespaces]]
-binding = "ANALYTICS_KV"
-id = "2b8dbfd7d39a4d23a0dfc36123085768"
-
 [assets]
 directory = "./dist"
 binding = "SITE_ASSETS"
 not_found_handling = "single-page-application"
 run_worker_first = [
-  "/",
-  "/optical-interconnect-companies",
-  "/optical-compute-interconnect-oci",
-  "/ai-interconnect",
-  "/optical-interconnects",
-  "/optical-compute-interconnect-msa",
-  "/ai-interconnect-podcast",
-  "/optical-scale-up-consortium",
-  "/ai-data-center-interconnect",
-  "/pricing",
-  "/privacy",
-  "/terms",
-  "/sitemap.xml",
-  "/robots.txt",
-  "/api/*"
+  "/*"
 ]
+
+[[d1_databases]]
+binding = "DB"
+# Shared production analytics D1. Rows are isolated by site_key.
+database_name = "openclaw-launch"
+database_id = "5c31068a-d85a-4c83-9efe-01e2de1ad22b"
