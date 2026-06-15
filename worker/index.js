@@ -43,6 +43,7 @@ const indexablePaths = [
   '/optical-scale-up-consortium',
   '/ai-data-center-interconnect',
   '/pricing',
+  '/resources',
   '/privacy',
   '/terms',
 ]
@@ -379,9 +380,13 @@ async function fetchAsset(request, env) {
 
     if (staticAssetPaths.has(normalizedPath)) {
       const assetUrl = new URL(request.url)
-      assetUrl.pathname = normalizedPath === '/' ? '/' : `${normalizedPath}/index.html`
+      assetUrl.pathname = normalizedPath === '/' ? '/' : `${normalizedPath}/`
       const assetResponse = await env.SITE_ASSETS.fetch(new Request(assetUrl.toString(), request))
       if (assetResponse.status !== 404) return assetResponse
+    }
+
+    if (normalizedPath !== '/' && !/\.[a-z0-9]+$/i.test(normalizedPath) && !staticAssetPaths.has(normalizedPath)) {
+      return noIndexNotFoundResponse(request)
     }
 
     return env.SITE_ASSETS.fetch(request)

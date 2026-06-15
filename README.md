@@ -23,4 +23,3 @@ npm run pages:deploy
 ## Payment
 
 The production payment secret is expected as `API_PROD_KEY` in Cloudflare. Do not commit payment keys or account credentials.
-

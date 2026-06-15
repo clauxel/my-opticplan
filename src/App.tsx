@@ -160,8 +160,8 @@ async function readJsonResponse<T>(response: Response): Promise<T | null> {
   }
 }
 
-async function createCheckoutSession(planId: PlanId, billing: Billing) {
-  const response = await fetch(resolveApiUrl('/api/checkout'), {
+async function createCheckoutSession(planId: PlanId, billing: Billing, endpoint = '/api/checkout') {
+  const response = await fetch(resolveApiUrl(endpoint), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ planId, billing }),
@@ -368,7 +368,7 @@ export default function App() {
     } catch {}
   }
 
-  async function startHostedCheckout(planId: PlanId, billingCycle: Billing, loadingKey: string) {
+  async function startHostedCheckout(planId: PlanId, billingCycle: Billing, loadingKey: string, provider = 'creem') {
     const popup = openCenteredCheckoutWindow()
     setSelectedPlanId(planId)
     setBilling(billingCycle)
@@ -377,7 +377,7 @@ export default function App() {
     trackEvent('checkout_open_start', { planId, billing: billingCycle, popup: Boolean(popup) })
 
     try {
-      const checkoutUrl = await createCheckoutSession(planId, billingCycle)
+      const checkoutUrl = await createCheckoutSession(planId, billingCycle, provider === 'nowpayments' ? '/api/nowpayments-checkout' : '/api/checkout')
       const popupReady = sendPopupToCheckout(popup, checkoutUrl)
       trackEvent('checkout_session_created', { planId, billing: billingCycle, popupReady })
       setCheckoutModal({ planId, billing: billingCycle, loadingKey, status: popupReady ? 'popup' : 'retry', checkoutUrl })
@@ -396,7 +396,7 @@ export default function App() {
     setBilling('annual')
     setSelectedPlanId('pro')
     trackEvent('primary_cta_click', { source, planId: 'pro', billing: 'annual' })
-    navigate('/pricing#pricing')
+    void startHostedCheckout('pro', 'annual', `cta-${source}`)
   }
 
   const renderHeader = () => (
@@ -426,7 +426,7 @@ export default function App() {
         </nav>
         <button type="button" className="op-btn op-btn-primary op-header-cta" onClick={() => chooseProAnnual('header')}>
           <Rocket size={18} />
-          Choose Pro annual
+          Choose Professional annual
         </button>
       </div>
     </header>
@@ -501,7 +501,7 @@ export default function App() {
         </div>
         <button type="button" className="op-btn op-btn-primary" onClick={() => chooseProAnnual('planner')}>
           <Play size={18} />
-          Review Pro annual
+          Choose Professional annual
         </button>
       </div>
     </aside>
@@ -575,8 +575,16 @@ export default function App() {
                   onMouseEnter={() => setSelectedPlanId(planItem.id)}
                   disabled={checkoutLoadingKey !== null}
                 >
-                  {checkoutLoadingKey === loadingKey ? 'Opening secure checkout...' : planItem.id === 'pro' ? `Checkout Pro ${billing}` : `Checkout ${planItem.shortName} ${billing}`}
+                  {checkoutLoadingKey === loadingKey ? 'Opening secure checkout...' : planItem.id === 'pro' ? `Checkout Professional ${billing}` : `Checkout ${planItem.shortName} ${billing}`}
                 </button>
+                  <button
+                    type="button"
+                    className="op-btn op-btn-ghost"
+                    onClick={() => void startHostedCheckout(planItem.id, billing, `${loadingKey}-wallet`, 'nowpayments')}
+                    disabled={checkoutLoadingKey !== null}
+                  >
+                    {checkoutLoadingKey === `${loadingKey}-wallet` ? 'Opening USDC wallet...' : 'Pay with USDC Wallet'}
+                  </button>
                 {active ? <span className="op-plan-selected">Selected</span> : null}
               </div>
             </article>
@@ -626,22 +634,29 @@ export default function App() {
             <div className="op-hero-actions">
               <button type="button" className="op-btn op-btn-primary" onClick={() => chooseProAnnual('hero')}>
                 <Rocket size={18} />
-                Review Pro annual
+                Choose Professional annual
               </button>
               <button
                 type="button"
                 className="op-btn op-btn-ghost"
                 onClick={() => {
-                  trackEvent('planner_review', { source: 'hero-secondary' })
-                  navigate('/#planner')
+                  trackEvent('pricing_review', { source: 'hero-secondary' })
+                  navigate('/pricing#pricing')
                 }}
               >
                 <BarChart3 size={18} />
-                Tune estimator
+                Review plans
               </button>
-              <button type="button" className="op-btn op-btn-subtle" onClick={() => openPage('/ai-data-center-interconnect')}>
+              <button
+                type="button"
+                className="op-btn op-btn-subtle"
+                onClick={() => {
+                  trackEvent('planner_review', { source: 'hero-tertiary' })
+                  navigate('/#planner')
+                }}
+              >
                 <Network size={18} />
-                Read buyer guide
+                Tune estimator
               </button>
             </div>
             <p className="op-payment-note">

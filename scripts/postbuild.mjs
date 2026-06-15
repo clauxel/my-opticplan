@@ -239,7 +239,7 @@ function buildHomePrerender() {
           <p class="op-eyebrow">AI optical interconnect planning</p>
           <h1>Estimate the optical interconnect move before the AI cluster budget hardens.</h1>
           <p class="op-lede">OpticPlan models AI optical interconnect BOM, power, thermal impact, supplier comparison, migration roadmap, and investment committee reporting.</p>
-          <p><a class="op-btn op-btn-primary" href="/pricing">Review Pro annual</a></p>
+          <p><a class="op-btn op-btn-primary" href="/pricing">Choose Professional annual</a></p>
         </div>
       </section>
     </main>
