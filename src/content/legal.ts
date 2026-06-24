@@ -23,7 +23,7 @@ export const legalPrivacySections: LegalSection[] = [
   {
     title: 'Service providers',
     paragraphs: [
-      'Cloudflare supports hosting, routing, security, analytics infrastructure, and edge execution. Creem supports hosted checkout and payment processing.',
+      'Cloudflare supports hosting, routing, security, analytics infrastructure, and edge execution. Polar supports hosted checkout and payment processing.',
       'Payment details are handled by the payment provider. We do not ask users to send card numbers, passwords, supplier secrets, customer network diagrams, or API keys by email or through this public planner.',
       'Third-party services process information under their own terms and privacy practices. Do not proceed with checkout or external links if you do not accept those practices.',
     ],
@@ -90,7 +90,7 @@ export const legalTermsSections: LegalSection[] = [
   {
     title: 'Payments, reports, renewals, and refunds',
     paragraphs: [
-      'Payments are processed by Creem in a hosted popup window. Successful checkouts return the user to the homepage.',
+      'Payments are processed by Polar in a hosted popup window. Successful checkouts return the user to the homepage.',
       'Displayed annual pricing reflects a 50% discount versus the monthly run-rate for the same plan. Prices, plan names, features, report scopes, and availability may change before purchase.',
       'Single-project report pricing may vary by scope and does not create a duty to deliver engineering certification, procurement advice, legal advice, or guaranteed business results unless a separate signed agreement says so.',
       'Unless a separate written agreement says otherwise, purchases are final to the maximum extent permitted by law. If the payment provider, consumer law, or a written policy requires a refund, that required rule controls.',
@@ -108,7 +108,7 @@ export const legalTermsSections: LegalSection[] = [
   {
     title: 'Third-party services',
     paragraphs: [
-      'Cloudflare, Creem, GitHub, AI model providers, suppliers, standards bodies, consortium resources, data providers, infrastructure providers, and other third-party services may be involved in hosting, checkout, references, integrations, or customer workflows.',
+      'Cloudflare, Polar, GitHub, AI model providers, suppliers, standards bodies, consortium resources, data providers, infrastructure providers, and other third-party services may be involved in hosting, checkout, references, integrations, or customer workflows.',
       'We are not responsible for third-party services, third-party outages, payment provider decisions, supplier statements, external repositories, standards changes, consortium changes, account bans, rate limits, taxes, procurement costs, or third-party terms.',
       'Your use of third-party services is governed by the applicable third-party terms, privacy policies, account rules, market rules, and fees.',
     ],

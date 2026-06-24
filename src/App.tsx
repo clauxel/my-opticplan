@@ -322,7 +322,7 @@ export default function App() {
       if (event.data?.type !== 'opticplan-checkout-complete') return
       setCheckoutModal(null)
       setCheckoutLoadingKey(null)
-      trackEvent('checkout_success_return', { provider: 'creem' })
+      trackEvent('checkout_success_return', { provider: 'polar' })
       navigate('/?payment=success')
     }
 
@@ -368,7 +368,7 @@ export default function App() {
     } catch {}
   }
 
-  async function startHostedCheckout(planId: PlanId, billingCycle: Billing, loadingKey: string, provider = 'creem') {
+  async function startHostedCheckout(planId: PlanId, billingCycle: Billing, loadingKey: string, provider = 'polar') {
     const popup = openCenteredCheckoutWindow()
     setSelectedPlanId(planId)
     setBilling(billingCycle)
@@ -377,7 +377,7 @@ export default function App() {
     trackEvent('checkout_open_start', { planId, billing: billingCycle, popup: Boolean(popup) })
 
     try {
-      const checkoutUrl = await createCheckoutSession(planId, billingCycle, provider === 'nowpayments' ? '/api/nowpayments-checkout' : '/api/checkout')
+      const checkoutUrl = await createCheckoutSession(planId, billingCycle, provider === 'polar' ? '/api/polar-checkout' : '/api/checkout')
       const popupReady = sendPopupToCheckout(popup, checkoutUrl)
       trackEvent('checkout_session_created', { planId, billing: billingCycle, popupReady })
       setCheckoutModal({ planId, billing: billingCycle, loadingKey, status: popupReady ? 'popup' : 'retry', checkoutUrl })
@@ -580,7 +580,7 @@ export default function App() {
                   <button
                     type="button"
                     className="op-btn op-btn-ghost"
-                    onClick={() => void startHostedCheckout(planItem.id, billing, `${loadingKey}-wallet`, 'nowpayments')}
+                    onClick={() => void startHostedCheckout(planItem.id, billing, `${loadingKey}-wallet`, 'polar')}
                     disabled={checkoutLoadingKey !== null}
                   >
                     {checkoutLoadingKey === `${loadingKey}-wallet` ? 'Opening USDC wallet...' : 'Pay with USDC Wallet'}
@@ -604,7 +604,7 @@ export default function App() {
           </article>
           <article>
             <h3>Does checkout replace this page?</h3>
-            <p>No. Creem opens in a centered popup and the OpticPlan page stays visible behind a blurred overlay.</p>
+            <p>No. Polar opens in a centered popup and the OpticPlan page stays visible behind a blurred overlay.</p>
           </article>
         </div>
       ) : null}
@@ -848,7 +848,7 @@ export default function App() {
           <div>
             <p className="op-eyebrow">Recommended next step</p>
             <h2>Run the planner, then keep Professional annual selected if the assumptions hold.</h2>
-            <p>Checkout stays in a centered Creem popup, with annual billing selected by default.</p>
+            <p>Checkout stays in a centered Polar popup, with annual billing selected by default.</p>
           </div>
           <div className="op-article-cta-actions">
             <button type="button" className="op-btn op-btn-primary" onClick={() => chooseProAnnual(`article-${page.path}`)}>
@@ -921,14 +921,14 @@ export default function App() {
             <div className="op-checkout-loading">
               <span aria-hidden />
               <div>
-                <h2>Preparing Creem checkout...</h2>
+                <h2>Preparing Polar checkout...</h2>
                 <p>Professional annual stays selected while the secure payment window opens.</p>
               </div>
             </div>
           ) : (
             <div className="op-checkout-copy">
               <p className="op-eyebrow">Secure checkout</p>
-              <h2>{checkoutModal.status === 'popup' ? 'Your Creem payment window is open.' : 'Popup blocked or checkout needs a retry.'}</h2>
+              <h2>{checkoutModal.status === 'popup' ? 'Your Polar payment window is open.' : 'Popup blocked or checkout needs a retry.'}</h2>
               <p>
                 {selectedPlan.name} {checkoutModal.billing} is set to {formatMoney(monthly)}/mo
                 {checkoutModal.billing === 'annual' ? ' with 50% annual savings.' : '.'}
